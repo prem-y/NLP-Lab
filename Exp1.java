@@ -8,12 +8,12 @@ Calculate P for the sentence “They play in a big Garden” assuming a bi-gram 
 
 public class Exp1 {
 
-    public static int bigramCount(String[] corpus, String word1, String word2) {
+     public static int countBigrams(String[] corpus, String word1, String word2) {
         int count = 0;
-        for (int i = 0; i < corpus.length; i++) {
-            String[] corpusTokens = corpus[i].split(" ");
-            for (int j = 0; j < corpusTokens.length - 1; j++) {
-                if (word1.equalsIgnoreCase(corpusTokens[j]) && word2.equals(corpusTokens[j + 1])) {
+        for (String sentence : corpus) {
+            String[] words = sentence.split(" ");
+            for (int i = 0; i < words.length - 1; i++) {
+                if (word1.equalsIgnoreCase(words[i]) && word2.equalsIgnoreCase(words[i + 1])) {
                     count++;
                 }
             }
@@ -21,12 +21,11 @@ public class Exp1 {
         return count;
     }
 
-    public static int unigramCount(String[] corpus, String word) {
+    public static int countUnigrams(String[] corpus, String word) {
         int count = 0;
-        for (int i = 0; i < corpus.length; i++) {
-            String[] corpusTokens = corpus[i].split(" ");
-            for (int j = 0; j < corpusTokens.length - 1; j++) {
-                if (word.equalsIgnoreCase(corpusTokens[j])) {
+        for (String sentence : corpus) {
+            for (String w : sentence.split(" ")) {
+                if (word.equalsIgnoreCase(w)) {
                     count++;
                 }
             }
@@ -35,16 +34,20 @@ public class Exp1 {
     }
 
     public static void main(String[] args) {
-        String[] corpus = { "There is a big garden", "Children play in a garden", "They play inside beautiful garden" };
-        String test = "They play in a big Garden";
-        String[] testTokens = test.split(" ");
+        String[] corpus = {
+                "There is a big garden",
+                "Children play in a garden",
+                "They play inside beautiful garden"
+        };
+        String[] testWords = "They play in a big Garden".split(" ");
         double probability = 1;
         int corpusSize = 9;
-        for (int i = 0; i < testTokens.length - 1; i++) {
-            probability *= (double) (bigramCount(corpus, testTokens[i], testTokens[i + 1]))
-                    / (unigramCount(corpus, testTokens[i])+corpusSize);
+
+        for (int i = 0; i < testWords.length - 1; i++) {
+            probability *= (double) countBigrams(corpus, testWords[i], testWords[i + 1])
+                    / (countUnigrams(corpus, testWords[i]) + corpusSize);
         }
 
-        System.out.format("Probability: %.4f", probability);
+        System.out.printf("Probability: %.8f%n", probability);
     }
 }
