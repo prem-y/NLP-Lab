@@ -2,6 +2,8 @@
  * Find the bigram count for the given corpus. Apply Laplace smoothing and find the bigram probabilities after add-one smoothing (up to 4 decimal places)
  */
 
+import java.util.*;
+
 public class Exp2 {
 
      public static int countBigrams(String[] corpus, String word1, String word2) {
@@ -29,19 +31,30 @@ public class Exp2 {
         return count;
     }
 
+    public static int calculateCorpusSize(String[] corpus){
+        Set<String> set = new HashSet<>();
+        for (String sentence : corpus) {
+            for (String w : sentence.split(" ")) {
+                set.add(w);
+            }
+        }
+        return set.size();
+    }
+
     public static void main(String[] args) {
         String[] corpus = {
                 "There is a big garden",
-                "Children play in the garden",
+                "Children play in a garden",
                 "They play inside beautiful garden"
         };
         String[] testWords = "They play in a big garden".split(" ");
         double probability = 1;
-        int vocabularySize = 9;
+
+        int corpusSize = calculateCorpusSize(corpus);
 
         for (int i = 0; i < testWords.length - 1; i++) {
             probability *= (double) (countBigrams(corpus, testWords[i], testWords[i + 1]) + 1)
-                    / (countUnigrams(corpus, testWords[i]) + vocabularySize);
+                    / (countUnigrams(corpus, testWords[i]) + corpusSize);
         }
 
         System.out.printf("Probability: %.8f%n", probability);
