@@ -5,6 +5,7 @@ b)	Children play in a garden
 c)	They play inside beautiful garden
 Calculate P for the sentence “They play in a big Garden” assuming a bi-gram language model.
  */
+import java.util.*;
 
 public class Exp1 {
 
@@ -33,6 +34,16 @@ public class Exp1 {
         return count;
     }
 
+    public static int calculateCorpusSize(String[] corpus){
+        Set<String> set = new HashSet<>();
+        for (String sentence : corpus) {
+            for (String w : sentence.split(" ")) {
+                set.add(w);
+            }
+        }
+        return set.size();
+    }
+
     public static void main(String[] args) {
         String[] corpus = {
                 "There is a big garden",
@@ -41,7 +52,8 @@ public class Exp1 {
         };
         String[] testWords = "They play in a big Garden".split(" ");
         double probability = 1;
-        int corpusSize = 9;
+        // int corpusSize = 11;
+        int corpusSize = calculateCorpusSize(corpus);
 
         for (int i = 0; i < testWords.length - 1; i++) {
             probability *= (double) countBigrams(corpus, testWords[i], testWords[i + 1])
